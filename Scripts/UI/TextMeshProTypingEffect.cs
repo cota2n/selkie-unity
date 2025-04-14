@@ -8,7 +8,7 @@ namespace Selkie.Scripts.UI
     public class TextMeshProTypingEffect : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI text;
-        [SerializeField] private float waitSec = 0.1f;
+        [SerializeField] private float waitSec = 0.02f;
 
         private bool _skipped;
 

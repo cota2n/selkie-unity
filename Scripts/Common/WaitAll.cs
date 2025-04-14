@@ -17,7 +17,7 @@ namespace Selkie.Scripts.Common
                 _origin = origin.Flatten();
             }
             
-            public bool MoveNext()
+            bool IEnumerator.MoveNext()
             {
                 if (_coroutine != null)
                 {
@@ -41,26 +41,26 @@ namespace Selkie.Scripts.Common
                 return next;
             }
 
-            public void Reset()
+            void IEnumerator.Reset()
             {
-                throw new System.NotImplementedException();
+                _origin.Reset();
             }
 
-            public object Current => new System.NotImplementedException();
+            object IEnumerator.Current => _origin.Current;
         }
-        
-        private readonly Inner[] _coroutines;
+
+        private readonly IEnumerator[] _coroutines;
         public WaitAll(IEnumerable<IEnumerator> coroutines)
         {
-            _coroutines = coroutines.Select(x => new Inner(x)).ToArray();
+            _coroutines = coroutines.Select(x => new Inner(x)).ToArray<IEnumerator>();
         }
         
         public WaitAll(params IEnumerator[] coroutines)
         {
-            _coroutines = coroutines.Select(x => new Inner(x)).ToArray();
+            _coroutines = coroutines.Select(x => new Inner(x)).ToArray<IEnumerator>();
         }
         
-        public bool MoveNext()
+        bool IEnumerator.MoveNext()
         {
             var ret = false;
             for (var i = 0; i < _coroutines.Length; i++)
@@ -71,14 +71,14 @@ namespace Selkie.Scripts.Common
             return ret;
         }
 
-        public void Reset()
+        void IEnumerator.Reset()
         {
-            for (var i = 0; i < _coroutines.Length; i++)
+            foreach (var t in _coroutines)
             {
-                _coroutines[i].Reset();
+                t.Reset();
             }
         }
 
-        public object Current => null;
+        object IEnumerator.Current => new System.NotSupportedException();
     }
 }

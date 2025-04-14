@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -18,6 +19,15 @@ namespace Selkie.Scripts.UI
             {
                 OnTap.Invoke();
             }
+        }
+
+        public IEnumerator WaitForTap()
+        {
+            var tapped = false;
+            UnityAction action = () => tapped = true;
+            onTap.AddListener(action);
+            yield return new WaitUntil(() => tapped);
+            onTap.RemoveListener(action);
         }
 
         protected override void OnPopulateMesh(VertexHelper vh)
